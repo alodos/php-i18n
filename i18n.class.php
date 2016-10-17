@@ -77,6 +77,7 @@ class i18n {
     protected $userLangs = array();
 
     protected $appliedLang = NULL;
+    protected $appliedLangFrom = NULL;
     protected $langFilePath = NULL;
     protected $cacheFilePath = NULL;
     protected $isInitialized = false;
@@ -121,9 +122,11 @@ class i18n {
 
         // search for language file
         $this->appliedLang = NULL;
+        $this->appliedLangFrom = NULL;
         foreach ($this->userLangs as $priority => $langcode) {
             $this->langFilePath = str_replace('{LANGUAGE}', $langcode, $this->filePath);
             if (file_exists($this->langFilePath)) {
+                $this->appliedLangFrom = $priority;
                 $this->appliedLang = $langcode;
                 break;
             }
@@ -183,6 +186,15 @@ class i18n {
 
     public function getAppliedLang() {
         return $this->appliedLang;
+    }
+
+    /**
+     * Source of applied language (GET, COOKIE, etc.)
+     * 
+     * @return string
+     */
+    public function getAppliedLangFrom() {
+        return $this->appliedLangFrom;
     }
 
     public function getCachePath() {
